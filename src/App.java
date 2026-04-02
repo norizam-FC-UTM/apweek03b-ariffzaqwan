@@ -5,23 +5,31 @@ class BankAccount {
     String name;
     double balance;
     double dividendRate; // example: 0.05 = 5%
+    String[] transacHistory;
+    int idx;
 
     // Constructor
     public BankAccount(String name, double initialDeposit) {
         this.name = name;
         this.balance = initialDeposit;
         this.dividendRate = 0.0;
+        this.transacHistory=new String[90];
+        this.idx =0;
     }
 
     // Deposit money
     public void deposit(double amount) {
         balance = balance + amount;
+        transacHistory[idx]="Deposit..."+amount;
+        idx++;
         // too simple - need refinement
     }
 
     // Withdraw money
     public void withdraw(double amount) {
         balance = balance - amount;
+        transacHistory[idx]="Withdraw..."+amount;
+        idx++;
         // too simple - need refinement
     }
 
@@ -34,8 +42,16 @@ class BankAccount {
     public void applyDividend() {
         double dividend = calculateDividend();
         balance = balance + dividend;
+        transacHistory[idx]="Add Dividend..."+dividend;
+        idx++;
     }
 
+    public void printTransAct(){
+        System.out.println("Transaction History...");
+        for (int i=0;i<idx;i++){
+            System.out.println(transacHistory[i]);
+        }
+    }
     // Set dividend rate
     public void setDividendRate(double rate) {
         dividendRate = rate;
@@ -50,14 +66,81 @@ class BankAccount {
         System.out.println("Dividend Rate : " + dividendRate * 100 + "%");
         System.out.println();
     }
+
+    public double getBalance(){
+        return this.balance;
+    }
 }
 
 public class App {
     public static void main(String[] args) {
 
+        int[] finMarks= {88,75,60,80,90,95,77,91,77,80};
+        for (int elem:finMarks){
+            System.out.println(elem);
+        }
+
+
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("===== BANK ACCOUNT SYSTEM =====");
+        BankAccount acc1= new BankAccount("Ali",10.00);
+        BankAccount acc2= new BankAccount("Bali",10.00);
+        BankAccount acc3= new BankAccount("Cali",10.00);
+        BankAccount acc4= new BankAccount("Abudali",10.00);
+        BankAccount acc5= new BankAccount("Dali",10.00);
+
+        System.out.println(acc1);
+
+        acc3.deposit(575);
+        acc3.setDividendRate(0.125);
+        acc3.applyDividend();
+        acc3.printObjectState();
+
+        BankAccount[] ACCArray = new BankAccount[7];
+        System.out.println(ACCArray);
+        System.out.println(ACCArray[0]);
+        System.out.println(ACCArray[1]);
+        System.out.println(ACCArray[2]);
+        System.out.println(ACCArray[3]);
+        System.out.println(ACCArray[4]);
+
+        ACCArray[0]=acc1;
+        ACCArray[1]=acc2;
+        ACCArray[2]=acc3;
+        ACCArray[3] = new BankAccount("Siti", 500);
+        ACCArray[4] = new BankAccount("Siva", 100);
+        ACCArray[5] = acc4;
+        ACCArray[6] = acc5;
+
+        ACCArray[3].deposit(700);
+        ACCArray[4].withdraw(50);
+        ACCArray[4].deposit(400);
+        ACCArray[4].withdraw(200);
+
+        for (int i=0;i<7;i++){
+            ACCArray[i].printObjectState();
+        }
+
+        //end of year 2026, apply div 7.5% to all acc
+        for (int i=0;i<7;i++){
+            ACCArray[i].setDividendRate(0.075);
+            ACCArray[i].applyDividend();
+            ACCArray[i].printObjectState();
+        }
+
+        //search for account w highest balance,then printinfo
+        BankAccount temp = ACCArray[0]; //using enhanced loop
+        for (BankAccount elem:ACCArray){
+            if (elem.getBalance()>temp.getBalance()){
+                temp=elem;
+            }           
+        }
+        System.out.println("Account with highest balance...");
+        temp.printObjectState();
+
+        ACCArray[4].printTransAct();
+        
+        /*System.out.println("===== BANK ACCOUNT SYSTEM =====");
 
         // Input
         System.out.print("Enter account holder name: ");
@@ -95,7 +178,7 @@ public class App {
 
         acc1.printObjectState();
 
-        System.out.println("===== END OF PROGRAM =====");
+        System.out.println("===== END OF PROGRAM ====="); */
 
         sc.close();
     }
